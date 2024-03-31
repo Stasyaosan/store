@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+{% block title %} Meow Store {% endblock %}
+{% block content %}
+<h2>Личный кабинет</h2>
+<p>{{data.login}}</p>
+<p>Баланс: {{data.balance}} руб.</p>
+<p><img src="/media/{{data.avatar}}" width="150px" height="150px" style="border-radius: 50%"></p>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>
+        <label for="email">Электонная почта</label>
+        <input type="email" name="email" id="email" value="{{data.email}}">
+    </p>
+    <p>
+        <label for="phone">Телефон</label>
+        <input class="phone" type="text" name="phone" id="phone" value="{{data.phone}}">
+    </p>
+    <p>
+        <label for="avatar" class="avatar_new">Загрузить аватарку</label>
+        <input type="file" name="avatar" id="avatar" accept="image/png, image/jpg, image/jpeg">
+    </p>
+    <p>
+        <button class="btn">Обновить</button>
+    </p>
+</form>
+<div class="products">
+    {% for order in orders %}
+    <div class="product_item">
+        <p>
+            {{order.status}}
+        </p>
+        <p>
+            {{order.total_price}} руб.
+        </p>
+        <p>
+            {{order.date}}
+        </p>
+        <p>
+            <a href="order/{{order.id}}" class="btn">№ заказа {{order.id}}</a>
+        </p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

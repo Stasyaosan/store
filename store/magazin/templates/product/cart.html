@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+{% block title %} Meow Store {% endblock %}
+{% block content %}
+<h2 align="center">Корзина</h2>
+<table>
+    <tr>
+        <th>Название</th>
+        <th class="image_cart">Картинка</th>
+        <th>Кол-во</th>
+        <th class="price_cart">Цена за 1</th>
+        <th>Цена</th>
+    </tr>
+    {% for product in products %}
+    <tr class="tr_ajax_{{product.id}}">
+        <td>
+            <a href="/product/{{product.id}}">
+                {{product.product.title}}
+            </a>
+        </td>
+        <td class="image_cart">
+            <img class="cart_img" src="/media/{{product.product.image}}" width="200px">
+        </td>
+        <td class="count_ajax_{{product.id}}">{{product.count}}</td>
+        <td class="price_cart price_ajax_{{product.id}}">{{product.product.price}}</td>
+        <td class="total_ajax_{{product.id}}">{{product.total}}</td>
+        <td>
+            <p>
+                <button class="btn btn-red" data="{{product.id}}">Удалить</button>
+            </p>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="6">
+            Общая сумма покупки: <label class="total_price">{{all_total}}</label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            {% if 'login' in request.session %}
+            <form action="/order" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="{{all_total}}" class="all_total_order" name="all_total">
+                <button class="btn">Оформить заказ</button>
+            </form>
+            {% else %}
+            <p><a href="/auth">Авторизируйтесь</a> для того чтобы сделать заказ</p>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+{% endblock %}

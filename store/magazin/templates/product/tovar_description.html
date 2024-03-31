@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+{% block title %} {{product.title}} {% endblock %}
+{% block content %}
+<h2>{{product.title}}</h2>
+<div class="block_product">
+    <div>
+        <p>
+            <img align="center" class="image_main" src="/media/{{product.image}}" width="90%" alt="{{product.title}}">
+        </p>
+        <p>
+            {{product.title}}
+        </p>
+        <div class="list_slider">
+            {% for slider in product.sliders.all %}
+            <img src="/media/{{slider.image}}" alt="{{slider.title}}" class="slider_img_item" width="70px" height="70px">
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <p>
+            Цена: {{product.price}} руб.
+        </p>
+        <button class="btn btn-buy" data="{{product.id}}">Добавить в корзину</button>
+        <p>
+            {{product.description}}
+        </p>
+    </div>
+</div>
+
+{% endblock %}

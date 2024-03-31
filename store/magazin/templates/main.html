@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/store.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://kenwheeler.github.io/slick/slick/slick-theme.css"/>
+    <link type="image/x-icon" href="/static/images/favicon.ico" rel="shortcut icon">
+    <link type="Image/x-icon" href="/static/images/favicon.ico" rel="icon">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+<body>
+<header class="header">
+    <h1 align="center">Meow Store</h1>
+    <a class="icon_menu_mobile">
+        <img src="/static/images/menu_mobile0.png" width="40px" class="icon_menu_img">
+    </a>
+    <ul class="menu">
+        <li>
+            <a href="/">Главная</a>
+        </li>
+        <li>
+            <a href="/catalog">Каталог</a>
+        </li>
+        {% if 'login' in request.session %}
+        <li>
+            <a href="/panel">Личный кабинет</a>
+        </li>
+        <li>
+            <a href="/logout">Выйти</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="/reg">Регистрация</a>
+        </li>
+        <li>
+            <a href="/auth">Авторизация</a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="/cart">
+                Корзина <span class="cart-count"></span>
+            </a>
+        </li>
+    </ul>
+</header>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+<footer class="footer">
+    <p align="center">Все права защищены 2024</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"
+        integrity="sha512-d4KkQohk+HswGs6A1d6Gak6Bb9rMWtxjOa0IiY49Q3TeFd5xAzjWXDCBW9RS7m86FQ4RzM2BdHmdJnnKRYknxw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $('.phone').mask("+9(999) 999-99-99");
+
+    /*слайдер на главной странице*/
+    $('.slider_conteiner').slick({
+      dots: true,
+      infinite: true,
+      speed: 500,
+      fade: true,
+      cssEase: 'linear'
+    });
+
+
+    $('.btn-buy').on('click', function(){
+        let id = $(this).attr('data');
+
+        $.ajax({
+            url: '/addproduct',
+            method: 'post',
+            dataType: 'json',
+            data: {id: id, csrfmiddlewaretoken: '{{csrf_token}}'},
+            success: function(data){
+                $('.cart-count').text('('+data+')')
+                alert('Выбранный товар добавлен в корзину');
+            }
+        });
+    });
+
+    /*удаление продукта*/
+    $('.btn-red').on('click', function(){
+        let id = $(this).attr('data');
+
+        $.ajax({
+            url: '/delproduct',
+            method: 'post',
+            dataType: 'json',
+            data: {id: id, csrfmiddlewaretoken: '{{csrf_token}}'},
+            success: function(){
+                let count = Number($('.count_ajax_'+id).text());
+                if(count > 1){
+                    count--;
+                }else {
+                    $('.tr_ajax_'+ id).remove();
+                }
+
+                $('.count_ajax_'+id).text(count);
+                let price = Number($('.price_ajax_'+id).text());
+                let total = count * price;
+                $('.total_ajax_'+id).text(total);
+
+                /*получение общей суммы товаров в карзине*/
+                 $.ajax({
+                    url: '/gettotal',
+                    method: 'post',
+                    dataType: 'json',
+                    data: {csrfmiddlewaretoken: '{{csrf_token}}'},
+                    success: function(totalPrice){
+                        $('.total_price').text(totalPrice)
+                        $('.all_total_order').val(totalPrice)
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+<script>
+    $(document).ready(function(){
+        $('.sortPrice').on('change', function(){
+            let s = $('.sortPrice option:selected').val();
+            $.ajax({
+                    url: '/filter',
+                    method: 'post',
+                    dataType: 'html',
+                    data: {csrfmiddlewaretoken: '{{csrf_token}}', mode: 'price', sort: s},
+                    success: function(data){
+                        $('.products').html(data);
+                    }
+                });
+        });
+
+        $('.sortCount').on('change', function(){
+            let s = $('.sortCount option:selected').val();
+            $.ajax({
+                    url: '/filter',
+                    method: 'post',
+                    dataType: 'html',
+                    data: {csrfmiddlewaretoken: '{{csrf_token}}', mode: 'count', sort: s},
+                    success: function(data){
+                        $('.products').html(data);
+                    }
+                });
+        });
+    });
+
+    $('.filter_search').on('input', function(){
+        let search = $(this).val();
+        $.ajax({
+                    url: '/filter',
+                    method: 'post',
+                    dataType: 'html',
+                    data: {csrfmiddlewaretoken: '{{csrf_token}}', mode: 'name', sort: search},
+                    success: function(data){
+                        $('.products').html(data);
+                    }
+                });
+    });
+
+    let m = false;
+        $('.icon_menu_img').on('click', function(){
+            if(m == false){
+                $('.icon_menu_img').attr('src', '/static/images/menu_mobile1.png')
+                $('.menu').fadeIn(500);
+                m=true;
+            }else{
+                $('.icon_menu_img').attr('src', '/static/images/menu_mobile0.png')
+                $('.menu').fadeOut(500);
+                m=false;
+            }
+
+        });
+
+    $('.slider_img_item').on('click', function(){
+            $('.image_main').attr('src', $(this).attr('src'));
+        });
+</script>
+</body>
+</html>

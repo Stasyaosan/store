@@ -1,0 +1,197 @@
+@font-face {
+    font-family: 'Mltsvfont1';
+    src: url('/static/fonts/Mltsvfont1.ttf');
+}
+
+@font-face {
+    font-family: 'Far Cry Cyr Regular_0';
+    src: url('/static/fonts/Far Cry Cyr Regular_0.ttf');
+}
+
+body {
+    font-family: 'Mltsvfont1';
+    background-image: url('/static/images/back.jpg');
+    background-size: 100%;
+    color: #fff;
+}
+
+h1 {
+    font-family: 'Far Cry Cyr Regular_0';
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    display: block;
+    margin: 0px;
+}
+
+.menu li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    background: #333;
+    color: #fff;
+    transition: background ease-in-out 1s, color ease-in-out 1s;
+}
+
+.menu li a:hover {
+    background: #fff;
+    color: #333
+}
+
+.slider_conteiner {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.slider_conteiner img {
+    width: 100%;
+}
+
+.product_item {
+    display: block;
+    border: 10px;
+    margin: 50px;
+    width: 250px;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1000;
+    margin: 10px auto;
+}
+
+.block_product {
+    display: flex;
+}
+
+.filter_search {
+    padding: 8px 14px;
+    margin-top: 20px;
+    border-radius: 7px;
+    width: 250px;
+    border: none;
+}
+
+.block_product div:first-child{
+    width: 40%;
+}
+.block_product div:last-child{
+    width: 60%;
+}
+
+.btn {
+    cursor: pointer;
+    background-color: #7FFF00;
+    color: #000;
+    border: none;
+    padding: 10px;
+    transition: background-color ease-in-out 1s;
+}
+
+.btn-buy:hover {
+    background: #0f0;
+}
+
+.btn-red {
+    cursor: pointer;
+    background-color: red;
+    color: #fff;
+    transition: background-color ease-in-out 1s;
+}
+
+.btn-red:hover {
+    background-color: #a00;
+}
+
+
+.container{
+    width: 1100px;
+    margin: 10px auto;
+    /*text-align: center*/
+}
+
+#avatar {
+    display: none;
+}
+
+.avatar_new{
+    display: block;
+    width: 200px;
+    background-color: #00FF7F;
+    color: #fff;
+    padding: 10px;
+    margin: 20px auto;
+}
+
+table tr td, table tr th {
+    padding: 15px;
+}
+
+.cart_img {
+    display: blox;
+    box-shadow: 5px 5px 10px #000
+}
+
+.icon_menu_mobile {
+    display: none
+}
+
+@media (max-width: 500px) {
+    .icon_menu_mobile {
+        display: block;
+        text-align: right;
+    }
+
+    .icon_menu_mobile {
+        cursor: pointer;
+
+    }
+
+    .menu{
+        display: none;
+        position: absolute;
+        width: 97%;
+        z-index: 1;
+    }
+
+    .container, .slider_conteiner{
+        width: 90%
+    }
+
+    .popular_products{
+        width: 100%
+    }
+    .product_item {
+        width: 45%
+    }
+
+    .image_cart, .price_cart {
+        display: none;
+    }
+}
+
+@media (max-width: 450px){
+    .product_item{
+        width: 100%;
+    }
+}
+
+.list_slider {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.list_slider img {
+    margin: 5px;
+    display: block;
+}

@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% block title %} Meow Store {% endblock %}
+{% block content %}
+<div class="popular_products">
+    <h2>Каталог</h2>
+    <div class="catalogFilter">
+        <label>Соритровка цены</label>
+        <select class="sortPrice">
+            <option value="sort_1">По возрастанию</option>
+            <option value="sort_2">По убыванию</option>
+        </select>
+        <label>Соритровка по количеству</label>
+        <select class="sortCount">
+            <option value="count_1">По возрастанию</option>
+            <option value="count_2">По убыванию</option>
+        </select>
+    </div>
+    <div>
+        <input type="text" class="filter_search" placeholder="Поиск товара">
+    </div>
+    <div class="products">
+        {% for product in tovari %}
+        <div class="product_item">
+            <h2>{{product.title}}</h2>
+            <p>
+                <img src="/media/{{product.image}}" width="100%" height="250px">
+            </p>
+            <p>
+                {{product.price}} руб.
+            </p>
+            <p>
+                Кол-во: {{product.count}}
+            </p>
+            <p>
+                <button class="btn btn-buy" data="{{product.id}}">Купить</button>
+                <a class="btn" href="/product/{{product.id}}">Подробнее</a>
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
